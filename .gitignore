@@ -24,6 +24,16 @@
 *.lib
 
 # Executables
-*.exe
 *.out
 *.app
+
+# Visual Studio Stuff
+.vs/*
+Debug/*
+GameBooster/*
+Release/*
+*.sln
+x64/*
+src/x64/*
+src/*.vcxproj*
+src/Debug/*
