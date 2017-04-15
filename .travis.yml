@@ -6,4 +6,4 @@ dist: trusty
 before_script:
 - mkdir travis
 - cd travis
-script: g++ -std=c++11 ../src/* -o GameBooster.exe 
+script: g++ -std=c++11 ../src/* -w -o GameBooster.exe 

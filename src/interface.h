@@ -1,2 +1,3 @@
 #pragma once
-int welcome(int interval = 300);
+void languageSwitcher();
+int welcome(int interval = 30);

@@ -4,6 +4,18 @@
 *.o
 *.obj
 
+#Visual Studio Files
+*.suo
+*.VC.db
+*.VC.opendb
+*.ipch
+*.vcxproj*
+*.log
+*.pdb
+*.tlog
+*.ipdb
+*.iobj
+VS*
 # Precompiled Headers
 *.gch
 *.pch
@@ -26,6 +38,8 @@
 # Executables
 *.out
 *.app
+*.bat
+*.sh
 
 # Visual Studio Stuff
 .vs/*
