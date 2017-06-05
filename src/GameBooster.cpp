@@ -1,4 +1,5 @@
 #include "GameBooster.h"
+#include "language.h"
 
 int main(int argc, const char * argv[]) {
 	switch (argc) {
