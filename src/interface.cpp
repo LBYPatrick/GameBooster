@@ -1,8 +1,11 @@
 #include "GameBooster.h"
 #include "processList.h"
 #include "language.h"
+#include <windows.h>
+
 string initialBoostMessage;
 string boostedPrograms = "";
+string boostedPrograms_buf = "Empty";
 string detectionIntervalMessage;
 string initMessage;
 string detectMessage;
@@ -17,12 +20,15 @@ string excludedPrograms = "";
 
 
 void initBoost() {
-	util::enhancedLookupInit();
-	util::visualProgress(initialBoostMessage, -1, num_negativeProcesses);
+	
+	util::enhancedLookupInit(); //Generate a tasklist
+
+	util::visualProgress(initialBoostMessage, -1, num_negativeProcesses); //Show progress
+
 	for (int i = 0; i < num_negativeProcesses; ++i) {
 		if (util::enhancedLookup(negativeProgram_processes[i])) {
 			util::visualProgress(initialBoostMessage, i - 1, num_negativeProcesses);
-			util::lowPriority(negativeProgram_processes[i]);
+			util::lowPriority(negativeProgram_processes[i]); //Set negative-impact programs to low priority
 		}
 	}
 	util::visualProgress(initialBoostMessage, num_negativeProcesses - 1, num_negativeProcesses);
@@ -47,19 +53,21 @@ void scanGames() {
 
 	for (unsigned int counter = 0; counter < num_games; ++counter) {
 
-		bool result = util::enhancedLookup(game_processNames[counter]);
+		bool result = util::enhancedLookup(game_processNames[counter]); //Would return 1 if the process exists in the tasklist
 		
 		if (result) {
-			if (excludedPrograms.find(game_processNames[counter]) != std::string::npos) continue;
+			if (excludedPrograms.find(game_processNames[counter]) != std::string::npos) continue; //If this program had been boosted already, skip.
 
-			else {
-				util::visualProgress(detectMessage + " " + game_names[counter] + "...", counter - 1, num_games);
-
+			if (excludedPrograms.find(game_processNames[counter]) == std::string::npos) { 
+				
+				//Show the current progress for scanning
+				util::visualProgress(detectMessage + " " + game_names[counter] + "...", counter - 1, num_games); 
 				printf("\n\"%s\" %s\n",
 					game_names[counter].c_str(),
 					detectedMessage.c_str()
 				);
 
+				//Set the process to high priority
 				util::highPriority(game_processNames[counter]);
 				boostedPrograms +=
 					util::getCurrentTime()
@@ -68,6 +76,7 @@ void scanGames() {
 					+ "\" "
 					+ boostedMessage;
 				
+				//Add this process to the exclude list, so that next time it would be skipped
 				excludedPrograms +=
 					game_processNames[counter]
 					+ "\n";
@@ -77,10 +86,25 @@ void scanGames() {
 }
 
 void postBoost() {
-	ofstream writeToLog;
-	writeToLog.open("Boost.log", ios::app);
-	writeToLog << boostedPrograms;
-	writeToLog.close();
+	
+
+	if (boostedPrograms != boostedPrograms_buf && boostedPrograms != "") {
+		ofstream writeToLog;
+		writeToLog.open("Boost.log", ios::app);
+		
+		writeToLog << "Update on:  "
+		<<util::getCurrentTime()
+		<<"\n"
+		<<"======================================================="
+		<<"\n\n";
+		
+		writeToLog << boostedPrograms;
+		writeToLog << "\n\n\n";
+		writeToLog.close();
+	}
+    //Store the current list of boosted programs, if there is no change next time, this function would not write anything to the log
+	boostedPrograms_buf = boostedPrograms;
+	
 }
 
 int welcome(int interval) {
@@ -116,7 +140,7 @@ int welcome(int interval) {
 			util::visualTimer(nextScanMessage,timer,interval);
 			printf("\n\n");
 			printf(boostedPrograms.c_str());
-			system("timeout 1 > nul");
+			Sleep(1000);
 		}
 	}
 }

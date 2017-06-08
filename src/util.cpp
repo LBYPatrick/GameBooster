@@ -14,7 +14,8 @@ void util::enhancedLookupInit() {
 }
 
 bool util::enhancedLookup(string programName) {
-	if (tasklist.find(programName.c_str()) != string::npos) {
+	string tempBuf = programName + ".";
+	if (tasklist.find(tempBuf.c_str()) != string::npos) {
 		return 1;
 	}
 		return 0;
