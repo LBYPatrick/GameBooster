@@ -1,4 +1,12 @@
-#include "GameBooster.h"
+#define _CRT_SECURE_NO_WARNINGS
+
+#include<iostream>
+#include<string>
+#include<stdlib.h>
+#include<fstream>
+#include<windows.h>
+#include "util.h"
+using namespace std;
 
 ifstream ReadTasklist;
 string tasklistTemp;
@@ -178,4 +186,23 @@ void util::killTask(string taskname){
 	char buffer[128];
 	sprintf(buffer,"taskkill /f /im %s.exe",taskname.c_str());
 	system(buffer);
+}
+
+
+bool util::isUserAdmin() {
+	BOOL b;
+	SID_IDENTIFIER_AUTHORITY NtAuthority = SECURITY_NT_AUTHORITY;
+	PSID AdministratorsGroup;
+	b = AllocateAndInitializeSid(
+		&NtAuthority,
+		2,
+		SECURITY_BUILTIN_DOMAIN_RID,
+		DOMAIN_ALIAS_RID_ADMINS,
+		0, 0, 0, 0, 0, 0,
+		&AdministratorsGroup);
+	if (b) {
+		if (!CheckTokenMembership(NULL, AdministratorsGroup, &b)) { b = false; }
+		FreeSid(AdministratorsGroup);
+	}
+	return (bool)b;
 }

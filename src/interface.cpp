@@ -1,7 +1,10 @@
-#include "GameBooster.h"
+#include "util.h"
 #include "processList.h"
 #include "language.h"
 #include <windows.h>
+#include <fstream>
+
+using namespace std;
 
 string initialBoostMessage;
 string boostedPrograms = "";
@@ -107,8 +110,15 @@ void postBoost() {
 	
 }
 
-int welcome(int interval) {
+int welcome(int interval, bool DebugMode, bool toRunAdminCheck) {
 	
+	if (toRunAdminCheck) {
+		if (!util::isUserAdmin()) {
+			printf("[Error] You need to run this program as Administrator for all functions to run properly.\n");
+			Sleep(2000);
+			return 0;
+		}
+	}
 	initBoost();
 	system("cls");
 

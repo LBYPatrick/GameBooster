@@ -16,5 +16,6 @@ namespace util {
 	void enhancedLookupCleanup();
 	string getCurrentTime();
 	void killTask(string taskname);
+	bool isUserAdmin();
 }
 

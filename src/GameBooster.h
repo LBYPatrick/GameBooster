@@ -4,7 +4,7 @@
 #include<string>
 #include<stdlib.h>
 #include<fstream>
+#include<windows.h>
 
 #include "interface.h"
-#include "util.h"
 using namespace std;
