@@ -24,24 +24,24 @@ string excludedPrograms = "";
 
 void initBoost() {
 	
-	util::enhancedLookupInit(); //Generate a tasklist
+	util::lookupInit(); //Generate a tasklist
 
 	util::visualProgress(initialBoostMessage, -1, num_negativeProcesses); //Show progress
 
 	for (int i = 0; i < num_negativeProcesses; ++i) {
-		if (util::enhancedLookup(negativeProgram_processes[i])) {
+		if (util::lookup(negativeProgram_processes[i])) {
 			util::visualProgress(initialBoostMessage, i - 1, num_negativeProcesses);
 			util::lowPriority(negativeProgram_processes[i]); //Set negative-impact programs to low priority
 		}
 	}
 	util::visualProgress(initialBoostMessage, num_negativeProcesses - 1, num_negativeProcesses);
-	util::enhancedLookupCleanup();
+	util::lookupCleanup();
 }
 
 void preBoost() {
 
 	for(unsigned int i = 0; i < num_blacklistPrograms; ++i){
-		bool result = util::enhancedLookup(blacklistPrograms[i]);
+		bool result = util::lookup(blacklistPrograms[i]);
 		if(result) {
 			util::killTask(blacklistPrograms[i]);
 		}
@@ -56,7 +56,7 @@ void scanGames() {
 
 	for (unsigned int counter = 0; counter < num_games; ++counter) {
 
-		bool result = util::enhancedLookup(game_processNames[counter]); //Would return 1 if the process exists in the tasklist
+		bool result = util::lookup(game_processNames[counter]); //Would return 1 if the process exists in the tasklist
 		
 		if (result) {
 			if (excludedPrograms.find(game_processNames[counter]) != std::string::npos) continue; //If this program had been boosted already, skip.
@@ -131,7 +131,7 @@ int welcome(int interval, bool DebugMode, bool toRunAdminCheck) {
 	//Detection+Executing Boost
 	while (true) {
 		
-		util::enhancedLookupInit();
+		util::lookupInit();
 		//Kill some junky background tasks...
 		preBoost();
 		util::visualProgress(startDetectionMessage, 0, num_games);
@@ -139,7 +139,7 @@ int welcome(int interval, bool DebugMode, bool toRunAdminCheck) {
 		scanGames();
 		
 		util::visualProgress(finishDetectionMessage,num_games-1,num_games);
-		util::enhancedLookupCleanup();
+		util::lookupCleanup();
 		system("cls");
 		//write logs to Boost.log...
 		postBoost();

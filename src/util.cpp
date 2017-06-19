@@ -12,7 +12,7 @@ ifstream ReadTasklist;
 string tasklistTemp;
 string tasklist;
 
-void util::enhancedLookupInit() {
+void util::lookupInit() {
 	system("tasklist > tasklist.txt");
 	ReadTasklist.open("tasklist.txt");
 	while (ReadTasklist>>tasklistTemp) {
@@ -21,7 +21,7 @@ void util::enhancedLookupInit() {
 	ReadTasklist.close();
 }
 
-bool util::enhancedLookup(string programName) {
+bool util::lookup(string programName) {
 	string tempBuf = programName + ".";
 	if (tasklist.find(tempBuf.c_str()) != string::npos) {
 		return 1;
@@ -29,7 +29,7 @@ bool util::enhancedLookup(string programName) {
 		return 0;
 }
 
-void util::enhancedLookupCleanup() {
+void util::lookupCleanup() {
 	tasklist = "";
 	system("del tasklist.txt");
 }

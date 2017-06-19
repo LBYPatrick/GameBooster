@@ -11,9 +11,9 @@ namespace util {
 	void lowPriority(string processName);
 	void visualProgress(string message, int currentProgress, int progressGoal);
 	string detectLanguage();
-	bool enhancedLookup(string programName);
-	void enhancedLookupInit();
-	void enhancedLookupCleanup();
+	bool lookup(string programName);
+	void lookupInit();
+	void lookupCleanup();
 	string getCurrentTime();
 	void killTask(string taskname);
 	bool isUserAdmin();
